@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "RentalProof – Digital Rental Condition, Evidence & Deposit Protection Platform",
   "scripts": {
+    "start": "node server/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "npm run dev --prefix server",
     "client": "npm run dev --prefix client",
     "seed": "npm run seed --prefix server",
     "install-all": "npm install && npm install --prefix server && npm install --prefix client",
-    "build": "npm run build --prefix client"
+    "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
