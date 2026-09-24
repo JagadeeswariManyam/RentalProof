@@ -37,6 +37,9 @@ connectDB();
 
 const app = express();
 
+// Trust reverse proxy for accurate client IP detection on Render / Railway
+app.set('trust proxy', 1);
+
 // Security Middleware
 app.use(
   helmet({
@@ -45,19 +48,41 @@ app.use(
 );
 
 // CORS setup
-const allowedOrigins = [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:3000'];
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'https://rental-proof-beige.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5000',
+  'http://127.0.0.1:5173',
+].filter(Boolean);
+
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+
+      // Check if origin matches allowed list or any Vercel domain or localhost
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1');
+
+      if (isAllowed) {
         callback(null, true);
       } else {
-        callback(null, true); // Permissive in dev to avoid CORS blocks
+        callback(null, true); // Fallback to avoid blocking
       }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   })
 );
+
+app.options('*', cors());
 
 // Logging
 if (process.env.NODE_ENV === 'development') {

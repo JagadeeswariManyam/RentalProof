@@ -1,7 +1,27 @@
 import axios from 'axios';
 
+// Detect API host: use VITE_API_URL if specified, default to Render in production, or /api locally
+const getBaseUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (import.meta.env.PROD) {
+    return 'https://rentalproof-1.onrender.com/api';
+  }
+  return '/api';
+};
+
+export const getMediaUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  const backendHost = import.meta.env.PROD ? 'https://rentalproof-1.onrender.com' : '';
+  return `${backendHost}${url.startsWith('/') ? '' : '/'}${url}`;
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
