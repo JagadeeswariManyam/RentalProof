@@ -144,22 +144,25 @@ const MaintenanceDetailPage = () => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <Link to="/maintenance" className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition">
+      <Link
+        to="/maintenance"
+        className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition"
+      >
         <ArrowLeft className="w-4 h-4" /> Back to Maintenance List
       </Link>
 
       {/* Ticket Header Card */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="bg-white dark:bg-slate-900/70 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-6 backdrop-blur-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div>
             <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-xs font-bold uppercase text-brand-600">{ticket.category}</span>
+              <span className="text-xs font-bold uppercase text-brand-600 dark:text-brand-400">{ticket.category}</span>
               <Badge variant={ticket.priority}>{ticket.priority} Priority</Badge>
               <Badge variant={ticket.status}>{ticket.status}</Badge>
             </div>
-            <h1 className="text-2xl font-extrabold text-slate-900">{ticket.title}</h1>
-            <p className="text-xs text-slate-500">
-              {ticket.property?.title} • Room: <span className="font-semibold text-slate-700">{ticket.room}</span>
+            <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">{ticket.title}</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {ticket.property?.title} • Room: <span className="font-semibold text-slate-700 dark:text-slate-300">{ticket.room}</span>
             </p>
           </div>
 
@@ -187,46 +190,46 @@ const MaintenanceDetailPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-4">
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
                 Reported Description
               </h3>
-              <p className="text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/60">
                 {ticket.description}
               </p>
             </div>
 
             {/* Financial Ledger Details */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/60 text-xs">
               <div>
-                <span className="text-slate-400 block text-[11px]">Reported By</span>
-                <span className="font-bold text-slate-800">{ticket.reportedBy?.name}</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Reported By</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{ticket.reportedBy?.name}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Assigned Technician</span>
-                <span className="font-bold text-slate-800">{ticket.assignedTo?.name || 'Pending'}</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Assigned Technician</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">{ticket.assignedTo?.name || 'Pending'}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Cost Estimate</span>
-                <span className="font-bold text-slate-800">₹{ticket.costEstimate || 0}</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Cost Estimate</span>
+                <span className="font-bold text-slate-800 dark:text-slate-200">₹{ticket.costEstimate || 0}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Actual Cost</span>
-                <span className="font-bold text-emerald-600">₹{ticket.actualCost || 0}</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Actual Cost</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">₹{ticket.actualCost || 0}</span>
               </div>
             </div>
           </div>
 
           {/* Photo Evidence */}
           <div>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
               Reported Photographic Proof
             </h3>
             {ticket.photos && ticket.photos.length > 0 ? (
-              <div className="rounded-2xl overflow-hidden border border-slate-200 h-44 shadow-sm">
+              <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 h-44 shadow-sm">
                 <img src={ticket.photos[0]} alt="Issue Evidence" className="w-full h-full object-cover" />
               </div>
             ) : (
-              <div className="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-xs text-slate-400">
+              <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-slate-200 dark:border-slate-700 text-xs text-slate-400 dark:text-slate-500">
                 No initial photo attached
               </div>
             )}
@@ -250,12 +253,12 @@ const MaintenanceDetailPage = () => {
       >
         <form onSubmit={handleAssignProvider} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Select Technician</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Select Technician</label>
             <select
               required
               value={selectedProvider}
               onChange={(e) => setSelectedProvider(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               {serviceProviders.map((sp) => (
                 <option key={sp._id} value={sp._id}>
@@ -265,7 +268,7 @@ const MaintenanceDetailPage = () => {
             </select>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setAssignModalOpen(false)}>
               Cancel
             </Button>
@@ -284,11 +287,11 @@ const MaintenanceDetailPage = () => {
       >
         <form onSubmit={handleUpdateStatus} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Status</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Status</label>
             <select
               value={newStatus}
               onChange={(e) => setNewStatus(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             >
               <option value="Reviewed">Reviewed</option>
               <option value="In Progress">In Progress (Parts Procured / On-Site)</option>
@@ -296,17 +299,17 @@ const MaintenanceDetailPage = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Timeline Note</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Timeline Note</label>
             <textarea
               rows={2}
               placeholder="e.g. Technician arrived on site; replacement gasket sourced..."
               value={statusNote}
               onChange={(e) => setStatusNote(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 p-2 text-xs focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 text-xs text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setStatusModalOpen(false)}>
               Cancel
             </Button>
@@ -326,30 +329,30 @@ const MaintenanceDetailPage = () => {
       >
         <form onSubmit={handleCompleteRepair} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Actual Repair Cost (₹)</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Actual Repair Cost (₹)</label>
             <input
               type="number"
               required
               placeholder="1200"
               value={actualCost}
               onChange={(e) => setActualCost(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Technician Resolution Summary</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Technician Resolution Summary</label>
             <textarea
               rows={3}
               required
               placeholder="e.g. Replaced 35mm ceramic disc cartridge and renewed Teflon seals. Tested under full pressure with zero leakage."
               value={completionNotes}
               onChange={(e) => setCompletionNotes(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setCompleteModalOpen(false)}>
               Cancel
             </Button>

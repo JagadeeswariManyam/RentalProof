@@ -35,19 +35,22 @@ const TenancyDetailPage = () => {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      <Link to="/tenancies" className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 transition">
+      <Link
+        to="/tenancies"
+        className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition"
+      >
         <ArrowLeft className="w-4 h-4" /> Back to Tenancies
       </Link>
 
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100">
+      <div className="bg-white dark:bg-slate-900/70 p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-6 backdrop-blur-xl">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold uppercase text-brand-600">Tenancy Record</span>
+              <span className="text-xs font-bold uppercase text-brand-600 dark:text-brand-400">Tenancy Record</span>
               <Badge variant={tenancy.status}>{tenancy.status}</Badge>
             </div>
-            <h1 className="text-2xl font-extrabold text-slate-900">{tenancy.property?.title}</h1>
-            <p className="text-xs text-slate-500">{tenancy.property?.address}, {tenancy.property?.city}</p>
+            <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white">{tenancy.property?.title}</h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{tenancy.property?.address}, {tenancy.property?.city}</p>
           </div>
 
           <div className="flex items-center gap-2">
@@ -66,24 +69,24 @@ const TenancyDetailPage = () => {
 
         {/* Landlord & Tenant Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-3">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-3">
               Landlord Details
             </span>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-slate-700 text-white flex items-center justify-center font-bold">
                 {tenancy.landlord?.name?.charAt(0) || 'L'}
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-900 block">{tenancy.landlord?.name}</span>
-                <span className="text-xs text-slate-500 block">{tenancy.landlord?.email}</span>
-                <span className="text-xs text-slate-500 block">{tenancy.landlord?.phone}</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-white block">{tenancy.landlord?.name}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block">{tenancy.landlord?.email}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block">{tenancy.landlord?.phone}</span>
               </div>
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-3">
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-3">
               Tenant Details
             </span>
             <div className="flex items-center gap-3">
@@ -91,38 +94,38 @@ const TenancyDetailPage = () => {
                 {tenancy.tenant?.name?.charAt(0) || 'T'}
               </div>
               <div>
-                <span className="text-sm font-bold text-slate-900 block">{tenancy.tenant?.name}</span>
-                <span className="text-xs text-slate-500 block">{tenancy.tenant?.email}</span>
-                <span className="text-xs text-slate-500 block">{tenancy.tenant?.phone}</span>
+                <span className="text-sm font-bold text-slate-900 dark:text-white block">{tenancy.tenant?.name}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block">{tenancy.tenant?.email}</span>
+                <span className="text-xs text-slate-500 dark:text-slate-400 block">{tenancy.tenant?.phone}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Financial Terms */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 text-xs">
           <div>
-            <span className="text-slate-400 block mb-1">Monthly Rent</span>
-            <span className="text-base font-extrabold text-slate-900">₹{tenancy.monthlyRent?.toLocaleString('en-IN')}</span>
+            <span className="text-slate-400 dark:text-slate-500 block mb-1">Monthly Rent</span>
+            <span className="text-base font-extrabold text-slate-900 dark:text-white">₹{tenancy.monthlyRent?.toLocaleString('en-IN')}</span>
           </div>
           <div>
-            <span className="text-slate-400 block mb-1">Security Deposit</span>
-            <span className="text-base font-extrabold text-slate-900">₹{tenancy.securityDeposit?.toLocaleString('en-IN')}</span>
+            <span className="text-slate-400 dark:text-slate-500 block mb-1">Security Deposit</span>
+            <span className="text-base font-extrabold text-slate-900 dark:text-white">₹{tenancy.securityDeposit?.toLocaleString('en-IN')}</span>
           </div>
           <div>
-            <span className="text-slate-400 block mb-1">Start Date</span>
-            <span className="text-sm font-bold text-slate-800">{new Date(tenancy.startDate).toLocaleDateString()}</span>
+            <span className="text-slate-400 dark:text-slate-500 block mb-1">Start Date</span>
+            <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{new Date(tenancy.startDate).toLocaleDateString()}</span>
           </div>
           <div>
-            <span className="text-slate-400 block mb-1">Expected End Date</span>
-            <span className="text-sm font-bold text-slate-800">{new Date(tenancy.expectedEndDate).toLocaleDateString()}</span>
+            <span className="text-slate-400 dark:text-slate-500 block mb-1">Expected End Date</span>
+            <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{new Date(tenancy.expectedEndDate).toLocaleDateString()}</span>
           </div>
         </div>
 
         {/* Agreement Notes */}
         {tenancy.notes && (
-          <div className="p-4 rounded-2xl bg-brand-50/40 border border-brand-100 text-xs text-slate-700">
-            <span className="font-bold block mb-1 text-brand-900">Special Terms / Agreement Notes:</span>
+          <div className="p-4 rounded-2xl bg-brand-50/40 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900/40 text-xs text-slate-700 dark:text-slate-300">
+            <span className="font-bold block mb-1 text-brand-900 dark:text-brand-300">Special Terms / Agreement Notes:</span>
             {tenancy.notes}
           </div>
         )}

@@ -109,8 +109,8 @@ const TenanciesPage = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Tenancy Management</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Tenancy Management</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Agreements, tenant invitations, and active lease records
           </p>
         </div>
@@ -124,9 +124,9 @@ const TenanciesPage = () => {
 
       {/* Invitations Section (If any pending) */}
       {invitations.length > 0 && (
-        <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <Mail className="w-4 h-4 text-brand-600" />
+        <div className="bg-white dark:bg-slate-900/70 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800/80 shadow-sm space-y-4 backdrop-blur-xl">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Mail className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             Tenancy Invitations ({invitations.length})
           </h3>
 
@@ -134,17 +134,17 @@ const TenanciesPage = () => {
             {invitations.map((inv) => (
               <div
                 key={inv._id}
-                className="p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between"
+                className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-900">{inv.property?.title}</span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">{inv.property?.title}</span>
                     <Badge variant={inv.status}>{inv.status}</Badge>
                   </div>
-                  <p className="text-xs text-slate-500 mb-2">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
                     {isLandlord ? `Invited: ${inv.tenantEmail}` : `From: ${inv.landlord?.name} (${inv.landlord?.email})`}
                   </p>
-                  <div className="text-xs text-slate-700 space-y-1">
+                  <div className="text-xs text-slate-700 dark:text-slate-300 space-y-1">
                     <div>Rent: ₹{inv.monthlyRent?.toLocaleString('en-IN')} / mo</div>
                     <div>Deposit: ₹{inv.securityDeposit?.toLocaleString('en-IN')}</div>
                   </div>
@@ -152,7 +152,7 @@ const TenanciesPage = () => {
 
                 {/* Actions for tenant */}
                 {isTenant && inv.status === 'Pending' && (
-                  <div className="flex gap-2 mt-4 pt-3 border-t border-slate-200">
+                  <div className="flex gap-2 mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
                     <Button variant="primary" size="sm" onClick={() => handleAcceptInvite(inv._id)}>
                       Accept & Connect
                     </Button>
@@ -168,10 +168,10 @@ const TenanciesPage = () => {
       )}
 
       {/* Tenancies Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="text-base font-bold text-slate-900">Active & Historical Tenancies</h3>
-          <span className="text-xs text-slate-500">{tenancies.length} records</span>
+      <div className="bg-white dark:bg-slate-900/70 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm overflow-hidden backdrop-blur-xl">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">Active & Historical Tenancies</h3>
+          <span className="text-xs text-slate-500 dark:text-slate-400">{tenancies.length} records</span>
         </div>
 
         {loading ? (
@@ -187,7 +187,7 @@ const TenanciesPage = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-100">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                 <tr>
                   <th className="px-6 py-4">Property</th>
                   <th className="px-6 py-4">{isTenant ? 'Landlord' : 'Tenant'}</th>
@@ -198,29 +198,29 @@ const TenanciesPage = () => {
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {tenancies.map((t) => (
-                  <tr key={t._id} className="hover:bg-slate-50/60 transition">
+                  <tr key={t._id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
                     <td className="px-6 py-4">
-                      <div className="font-bold text-slate-900">{t.property?.title}</div>
-                      <div className="text-[11px] text-slate-400">{t.property?.city}</div>
+                      <div className="font-bold text-slate-900 dark:text-white">{t.property?.title}</div>
+                      <div className="text-[11px] text-slate-400 dark:text-slate-500">{t.property?.city}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-semibold text-slate-800">
+                      <div className="font-semibold text-slate-800 dark:text-slate-200">
                         {isTenant ? t.landlord?.name : t.tenant?.name}
                       </div>
-                      <div className="text-[11px] text-slate-400">
+                      <div className="text-[11px] text-slate-400 dark:text-slate-500">
                         {isTenant ? t.landlord?.email : t.tenant?.email}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-600">
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
                       <div>{new Date(t.startDate).toLocaleDateString()}</div>
-                      <div className="text-[11px] text-slate-400">to {new Date(t.expectedEndDate).toLocaleDateString()}</div>
+                      <div className="text-[11px] text-slate-400 dark:text-slate-500">to {new Date(t.expectedEndDate).toLocaleDateString()}</div>
                     </td>
-                    <td className="px-6 py-4 font-bold text-slate-900">
+                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">
                       ₹{t.monthlyRent?.toLocaleString('en-IN')}
                     </td>
-                    <td className="px-6 py-4 font-bold text-slate-700">
+                    <td className="px-6 py-4 font-bold text-slate-700 dark:text-slate-300">
                       ₹{t.securityDeposit?.toLocaleString('en-IN')}
                     </td>
                     <td className="px-6 py-4">
@@ -250,7 +250,7 @@ const TenanciesPage = () => {
       >
         <form onSubmit={handleSendInvite} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Select Property</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Select Property</label>
             <select
               required
               value={inviteForm.propertyId}
@@ -263,7 +263,7 @@ const TenanciesPage = () => {
                   securityDeposit: prop?.depositAmount || inviteForm.securityDeposit,
                 });
               }}
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               {properties.map((p) => (
                 <option key={p._id} value={p._id}>
@@ -274,52 +274,52 @@ const TenanciesPage = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Tenant Email</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tenant Email</label>
             <input
               type="email"
               required
               placeholder="tenant@example.com"
               value={inviteForm.tenantEmail}
               onChange={(e) => setInviteForm({ ...inviteForm, tenantEmail: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Monthly Rent (₹)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Monthly Rent (₹)</label>
               <input
                 type="number"
                 required
                 value={inviteForm.monthlyRent}
                 onChange={(e) => setInviteForm({ ...inviteForm, monthlyRent: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Security Deposit (₹)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Security Deposit (₹)</label>
               <input
                 type="number"
                 required
                 value={inviteForm.securityDeposit}
                 onChange={(e) => setInviteForm({ ...inviteForm, securityDeposit: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Tenancy Start Date</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tenancy Start Date</label>
             <input
               type="date"
               required
               value={inviteForm.startDate}
               onChange={(e) => setInviteForm({ ...inviteForm, startDate: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setInviteModalOpen(false)}>
               Cancel
             </Button>

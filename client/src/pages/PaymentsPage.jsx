@@ -89,8 +89,8 @@ const PaymentsPage = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Rent Payment Records</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Rent Payment Records</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Documented monthly rental transactions and payment receipts
           </p>
         </div>
@@ -102,42 +102,42 @@ const PaymentsPage = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
+        <div className="bg-white dark:bg-slate-900/70 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-1">
             Total Rent Documented
           </span>
-          <div className="text-2xl font-black text-slate-900">₹{totalCollected.toLocaleString('en-IN')}</div>
-          <span className="text-xs text-emerald-600 font-semibold mt-1 block">
+          <div className="text-2xl font-black text-slate-900 dark:text-white">₹{totalCollected.toLocaleString('en-IN')}</div>
+          <span className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1 block">
             {payments.filter((p) => p.status === 'Paid').length} verified transactions
           </span>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
+        <div className="bg-white dark:bg-slate-900/70 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-1">
             Current Month Status
           </span>
-          <div className="text-2xl font-black text-emerald-600">Settled</div>
-          <span className="text-xs text-slate-500 mt-1 block">Zero overdue balances</span>
+          <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">Settled</div>
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1 block">Zero overdue balances</span>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1">
+        <div className="bg-white dark:bg-slate-900/70 p-6 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-xl">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 block mb-1">
             Payment Method Split
           </span>
-          <div className="text-sm font-bold text-slate-800 mt-1">UPI (85%) • Net Banking (15%)</div>
-          <span className="text-xs text-slate-400 mt-1 block">Verified digital transfers</span>
+          <div className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-1">UPI (85%) • Net Banking (15%)</div>
+          <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">Verified digital transfers</span>
         </div>
       </div>
 
       {/* Ledger Table Card */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-base font-bold text-slate-900">Rent Ledger History</h3>
+      <div className="bg-white dark:bg-slate-900/70 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm overflow-hidden backdrop-blur-xl">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">Rent Ledger History</h3>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs rounded-xl border border-slate-200 px-3 py-1.5 bg-slate-50 text-slate-700 font-medium focus:outline-none"
+            className="text-xs rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
           >
             <option value="all">All Statuses</option>
             <option value="Paid">Paid</option>
@@ -159,7 +159,7 @@ const PaymentsPage = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-100">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                 <tr>
                   <th className="px-6 py-4">Month</th>
                   <th className="px-6 py-4">Property</th>
@@ -170,21 +170,21 @@ const PaymentsPage = () => {
                   <th className="px-6 py-4">Remarks</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {payments.map((p) => (
-                  <tr key={p._id} className="hover:bg-slate-50/60 transition">
-                    <td className="px-6 py-4 font-bold text-slate-900">{p.month}</td>
-                    <td className="px-6 py-4 text-slate-600">{p.property?.title}</td>
-                    <td className="px-6 py-4 font-extrabold text-slate-900">
+                  <tr key={p._id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{p.month}</td>
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{p.property?.title}</td>
+                    <td className="px-6 py-4 font-extrabold text-slate-900 dark:text-white">
                       ₹{p.amount?.toLocaleString('en-IN')}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
                       {p.paymentDate ? new Date(p.paymentDate).toLocaleDateString() : 'N/A'}
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-slate-800">{p.paymentMethod}</span>
+                      <span className="font-semibold text-slate-800 dark:text-slate-200">{p.paymentMethod}</span>
                       {p.referenceNumber && (
-                        <span className="text-[11px] text-slate-400 block font-mono">
+                        <span className="text-[11px] text-slate-400 dark:text-slate-500 block font-mono">
                           {p.referenceNumber}
                         </span>
                       )}
@@ -192,7 +192,7 @@ const PaymentsPage = () => {
                     <td className="px-6 py-4">
                       <Badge variant={p.status}>{p.status}</Badge>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 italic max-w-xs truncate">
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 italic max-w-xs truncate">
                       {p.notes || '—'}
                     </td>
                   </tr>
@@ -212,7 +212,7 @@ const PaymentsPage = () => {
       >
         <form onSubmit={handleRecordPayment} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Tenancy Agreement</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Tenancy Agreement</label>
             <select
               required
               value={form.tenancyId}
@@ -224,7 +224,7 @@ const PaymentsPage = () => {
                   amount: t?.monthlyRent || form.amount,
                 });
               }}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               {tenancies.map((t) => (
                 <option key={t._id} value={t._id}>
@@ -236,71 +236,72 @@ const PaymentsPage = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Amount (₹)</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Amount (₹)</label>
               <input
                 type="number"
                 required
                 value={form.amount}
                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Rent Month</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Rent Month</label>
               <input
                 type="text"
+                required
                 placeholder="e.g. October 2026"
                 value={form.month}
                 onChange={(e) => setForm({ ...form, month: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Payment Method</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Payment Method</label>
               <select
                 value={form.paymentMethod}
                 onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               >
                 <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
-                <option value="Bank Transfer">Bank Transfer (NEFT/IMPS)</option>
-                <option value="Cash">Cash Receipt</option>
-                <option value="Cheque">Cheque</option>
+                <option value="NetBanking">Net Banking (NEFT/IMPS)</option>
+                <option value="Card">Debit / Credit Card</option>
+                <option value="Cash">Cash Handover</option>
+                <option value="Cheque">Bank Cheque</option>
               </select>
             </div>
-
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Reference Number</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Transaction Ref ID</label>
               <input
                 type="text"
-                placeholder="e.g. UPI-260901-4491"
+                placeholder="UTR / UPI Ref Number"
                 value={form.referenceNumber}
                 onChange={(e) => setForm({ ...form, referenceNumber: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Notes / Verification Remarks</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Payment Date</label>
             <input
-              type="text"
-              placeholder="e.g. Payment verified in landlord bank account."
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+              type="date"
+              required
+              value={form.paymentDate}
+              onChange={(e) => setForm({ ...form, paymentDate: e.target.value })}
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
             <Button type="submit" variant="primary" size="sm" loading={submitting}>
-              Log Payment
+              Save Payment
             </Button>
           </div>
         </form>

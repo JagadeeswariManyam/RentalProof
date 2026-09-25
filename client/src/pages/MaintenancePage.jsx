@@ -96,8 +96,8 @@ const MaintenancePage = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Maintenance Tickets</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Maintenance Tickets</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Issue reporting, service provider dispatch, and resolution evidence
           </p>
         </div>
@@ -108,16 +108,16 @@ const MaintenancePage = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-wrap items-center justify-between gap-3 backdrop-blur-xl">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             placeholder="Search by title, description, or room..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && fetchData()}
-            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
 
@@ -125,7 +125,7 @@ const MaintenancePage = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="text-xs rounded-xl border border-slate-200 px-3 py-2 bg-slate-50 text-slate-700 font-medium focus:outline-none"
+            className="text-xs rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
           >
             <option value="all">All Statuses</option>
             <option value="Reported">Reported</option>
@@ -138,7 +138,7 @@ const MaintenancePage = () => {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="text-xs rounded-xl border border-slate-200 px-3 py-2 bg-slate-50 text-slate-700 font-medium focus:outline-none"
+            className="text-xs rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
           >
             <option value="all">All Priorities</option>
             <option value="Low">Low</option>
@@ -165,11 +165,11 @@ const MaintenancePage = () => {
           {requests.map((req) => (
             <div
               key={req._id}
-              className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+              className="bg-white dark:bg-slate-900/70 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between backdrop-blur-xl"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold uppercase text-brand-600">{req.category}</span>
+                  <span className="text-xs font-bold uppercase text-brand-600 dark:text-brand-400">{req.category}</span>
                   <div className="flex items-center gap-1.5">
                     <Badge variant={req.priority} size="sm">
                       {req.priority}
@@ -180,26 +180,26 @@ const MaintenancePage = () => {
                   </div>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-900 line-clamp-1">{req.title}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  {req.property?.title} • Room: <span className="font-semibold text-slate-700">{req.room}</span>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white line-clamp-1">{req.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  {req.property?.title} • Room: <span className="font-semibold text-slate-700 dark:text-slate-300">{req.room}</span>
                 </p>
 
-                <p className="text-xs text-slate-600 mt-3 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-300 mt-3 line-clamp-2 leading-relaxed">
                   {req.description}
                 </p>
 
                 {/* Assigned To Badge */}
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                   <span>Assigned:</span>
-                  <span className="font-semibold text-slate-800">
+                  <span className="font-semibold text-slate-800 dark:text-slate-200">
                     {req.assignedTo?.name || 'Unassigned'}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[11px] text-slate-400">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <span className="text-[11px] text-slate-400 dark:text-slate-500">
                   {new Date(req.createdAt).toLocaleDateString()}
                 </span>
                 <Link to={`/maintenance/${req._id}`}>
@@ -222,12 +222,12 @@ const MaintenancePage = () => {
       >
         <form onSubmit={handleCreateSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Target Property</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Property</label>
             <select
               required
               value={form.propertyId}
               onChange={(e) => setForm({ ...form, propertyId: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
             >
               {properties.map((p) => (
                 <option key={p._id} value={p._id}>
@@ -238,24 +238,24 @@ const MaintenancePage = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Issue Title</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Issue Title</label>
             <input
               type="text"
               required
               placeholder="e.g. Master Bathroom Mixer Tap Dripping"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
             />
           </div>
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Category</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Category</label>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               >
                 <option value="Plumbing">Plumbing</option>
                 <option value="Electrical">Electrical</option>
@@ -267,11 +267,11 @@ const MaintenancePage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Priority</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Priority</label>
               <select
                 value={form.priority}
                 onChange={(e) => setForm({ ...form, priority: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               >
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
@@ -281,29 +281,29 @@ const MaintenancePage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Room / Area</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Room / Area</label>
               <input
                 type="text"
                 value={form.room}
                 onChange={(e) => setForm({ ...form, room: e.target.value })}
-                className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+                className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Detailed Description</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Detailed Description</label>
             <textarea
               rows={3}
               required
               placeholder="Describe what is broken, when it started, and symptoms..."
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setCreateModalOpen(false)}>
               Cancel
             </Button>

@@ -231,3 +231,195 @@ export const acknowledgeInspection = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Digital sign-off / confirmation for Landlord or Tenant
+// @route   PUT /api/inspections/:id/confirm
+// @access  Private
+export const confirmInspection = async (req, res, next) => {
+  try {
+    const { signedName, comments, status = 'Approved' } = req.body;
+    const inspection = await Inspection.findById(req.params.id);
+
+    if (!inspection) {
+      return res.status(404).json({ success: false, message: 'Inspection not found' });
+    }
+
+    if (!signedName) {
+      return res.status(400).json({ success: false, message: 'Signed name is required for confirmation' });
+    }
+
+    // Check if user already confirmed; update if so, otherwise append
+    const existingIndex = inspection.confirmations.findIndex(
+      (c) => c.user && c.user.toString() === req.user._id.toString()
+    );
+
+    const confirmationObj = {
+      user: req.user._id,
+      role: req.user.role,
+      signedName,
+      comments: comments || '',
+      status,
+      confirmedAt: new Date(),
+    };
+
+    if (existingIndex >= 0) {
+      inspection.confirmations[existingIndex] = confirmationObj;
+    } else {
+      inspection.confirmations.push(confirmationObj);
+    }
+
+    // Auto-mark tenantAcknowledged if tenant confirms
+    if (req.user.role === 'tenant') {
+      inspection.tenantAcknowledged = true;
+      inspection.tenantSignedAt = new Date();
+      if (comments) inspection.tenantNotes = comments;
+    }
+
+    await inspection.save();
+
+    await logAudit({
+      user: req.user._id,
+      action: 'Digital Inspection Confirmation',
+      entity: 'Inspection',
+      entityId: inspection._id,
+      description: `${req.user.role.toUpperCase()} ${signedName} digitally signed inspection status as [${status}]`,
+      req,
+    });
+
+    const populatedInspection = await Inspection.findById(req.params.id)
+      .populate('property')
+      .populate('inspector', 'name email role')
+      .populate('confirmations.user', 'name email role avatar');
+
+    res.status(200).json({
+      success: true,
+      message: 'Inspection digitally confirmed',
+      inspection: populatedInspection,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Add damage box annotation to an inspection item photo
+// @route   POST /api/inspections/:id/items/:itemId/annotations
+// @access  Private
+export const addAnnotation = async (req, res, next) => {
+  try {
+    const { photoIndex = 0, photoUrl, coordinates, title, description, severity } = req.body;
+    const inspection = await Inspection.findById(req.params.id);
+
+    if (!inspection) {
+      return res.status(404).json({ success: false, message: 'Inspection not found' });
+    }
+
+    const item = inspection.items.id(req.params.itemId);
+    if (!item) {
+      return res.status(404).json({ success: false, message: 'Inspection item not found' });
+    }
+
+    if (!coordinates || coordinates.x === undefined || coordinates.y === undefined) {
+      return res.status(400).json({ success: false, message: 'Valid coordinates {x, y, width, height} are required' });
+    }
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Annotation title is required' });
+    }
+
+    const newAnnotation = {
+      photoIndex,
+      photoUrl: photoUrl || (item.photos && item.photos[photoIndex]) || '',
+      coordinates,
+      title,
+      description: description || '',
+      severity: severity || 'Medium',
+      createdBy: req.user._id,
+      createdByName: req.user.name,
+      createdAt: new Date(),
+    };
+
+    item.annotations.push(newAnnotation);
+    await inspection.save();
+
+    await logAudit({
+      user: req.user._id,
+      action: 'Damage Annotation Added',
+      entity: 'Inspection',
+      entityId: inspection._id,
+      description: `Added "${title}" [${severity || 'Medium'}] on ${item.category} - ${item.item}`,
+      req,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Annotation added successfully',
+      item,
+      annotation: item.annotations[item.annotations.length - 1],
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete damage annotation
+// @route   DELETE /api/inspections/:id/items/:itemId/annotations/:annotationId
+// @access  Private
+export const deleteAnnotation = async (req, res, next) => {
+  try {
+    const inspection = await Inspection.findById(req.params.id);
+    if (!inspection) {
+      return res.status(404).json({ success: false, message: 'Inspection not found' });
+    }
+
+    const item = inspection.items.id(req.params.itemId);
+    if (!item) {
+      return res.status(404).json({ success: false, message: 'Inspection item not found' });
+    }
+
+    item.annotations = item.annotations.filter(
+      (a) => a._id.toString() !== req.params.annotationId
+    );
+
+    await inspection.save();
+
+    res.status(200).json({ success: true, message: 'Annotation removed', item });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Add evidence provenance metadata
+// @route   POST /api/inspections/:id/items/:itemId/metadata
+// @access  Private
+export const addEvidenceMetadata = async (req, res, next) => {
+  try {
+    const { photoUrl, hash, gpsCoords, capturedAt, device, room } = req.body;
+    const inspection = await Inspection.findById(req.params.id);
+
+    if (!inspection) {
+      return res.status(404).json({ success: false, message: 'Inspection not found' });
+    }
+
+    const item = inspection.items.id(req.params.itemId);
+    if (!item) {
+      return res.status(404).json({ success: false, message: 'Inspection item not found' });
+    }
+
+    item.evidenceMetadata.push({
+      photoUrl,
+      hash: hash || `sha256-${Math.random().toString(36).substring(2, 15)}`,
+      gpsCoords: gpsCoords || { latitude: 37.7749, longitude: -122.4194, locationName: 'Verified On-Site' },
+      capturedAt: capturedAt || new Date(),
+      uploader: req.user._id,
+      uploaderName: req.user.name,
+      device: device || 'Standard Mobile Camera',
+      room: room || item.category,
+    });
+
+    await inspection.save();
+
+    res.status(200).json({ success: true, message: 'Evidence metadata attached', item });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -51,13 +51,13 @@ const InspectionsPage = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Condition Inspections</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Condition Inspections</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Photographic baseline and checkout walkthrough evidence ledgers
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Link to="/inspections/compare">
             <Button variant="secondary" size="md" icon={SplitSquareVertical}>
               Before vs After Compare
@@ -74,15 +74,15 @@ const InspectionsPage = () => {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 overflow-x-auto no-scrollbar">
         {['all', 'Move-In', 'Move-Out'].map((t) => (
           <button
             key={t}
             onClick={() => setTypeFilter(t)}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold transition ${
+            className={`px-4 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap ${
               typeFilter === t
                 ? 'bg-brand-600 text-white shadow-sm'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
             }`}
           >
             {t === 'all' ? 'All Inspections' : t}
@@ -106,15 +106,15 @@ const InspectionsPage = () => {
           {inspections.map((insp) => (
             <div
               key={insp._id}
-              className="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+              className="bg-white dark:bg-slate-900/70 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between backdrop-blur-xl"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span
                     className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
                       insp.type === 'Move-In'
-                        ? 'bg-brand-50 text-brand-700 border border-brand-200'
-                        : 'bg-indigo-50 text-indigo-700 border border-indigo-200'
+                        ? 'bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800/60'
+                        : 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60'
                     }`}
                   >
                     {insp.type} Baseline
@@ -122,37 +122,37 @@ const InspectionsPage = () => {
                   <Badge variant={insp.status}>{insp.status}</Badge>
                 </div>
 
-                <h3 className="text-base font-bold text-slate-900 line-clamp-1">{insp.property?.title}</h3>
-                <p className="text-xs text-slate-500 mt-0.5">{insp.property?.address}, {insp.property?.city}</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white line-clamp-1">{insp.property?.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{insp.property?.address}, {insp.property?.city}</p>
 
-                <div className="grid grid-cols-2 gap-3 my-4 p-3 bg-slate-50 rounded-2xl border border-slate-100 text-xs">
+                <div className="grid grid-cols-2 gap-3 my-4 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700/60 text-xs">
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Inspection Date</span>
-                    <span className="font-bold text-slate-800">
+                    <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Inspection Date</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200">
                       {new Date(insp.inspectionDate).toLocaleDateString()}
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-400 block text-[11px]">Evidence Items</span>
-                    <span className="font-bold text-slate-800">{insp.items?.length || 0} Rooms / Fixtures</span>
+                    <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Evidence Items</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200">{insp.items?.length || 0} Rooms / Fixtures</span>
                   </div>
                 </div>
 
                 {/* Tenant sign-off state */}
                 <div className="flex items-center gap-1.5 text-xs">
                   {insp.tenantAcknowledged ? (
-                    <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                       <CheckCircle2 className="w-4 h-4" /> Tenant Verified & Signed
                     </span>
                   ) : (
-                    <span className="text-amber-600 font-semibold flex items-center gap-1">
+                    <span className="text-amber-600 dark:text-amber-400 font-semibold flex items-center gap-1">
                       <Clock className="w-4 h-4" /> Awaiting Tenant Sign-Off
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 flex gap-2">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
                 <Link to={`/inspections/${insp._id}`} className="flex-1">
                   <Button variant="outline" size="sm" className="w-full" icon={ArrowRight}>
                     View Evidence

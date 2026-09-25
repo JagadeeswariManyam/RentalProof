@@ -38,6 +38,50 @@ const inspectionItemSchema = new mongoose.Schema(
       observations: [{ type: String }],
       requiresManualReview: { type: Boolean, default: false },
     },
+    annotations: [
+      {
+        photoIndex: { type: Number, default: 0 },
+        photoUrl: { type: String, default: '' },
+        coordinates: {
+          x: { type: Number, required: true }, // percentage 0-100
+          y: { type: Number, required: true },
+          width: { type: Number, required: true },
+          height: { type: Number, required: true },
+        },
+        title: { type: String, required: true },
+        description: { type: String, default: '' },
+        severity: {
+          type: String,
+          enum: ['Low', 'Medium', 'High', 'Critical'],
+          default: 'Medium',
+        },
+        createdBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        createdByName: { type: String, default: '' },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    evidenceMetadata: [
+      {
+        photoUrl: { type: String, required: true },
+        hash: { type: String, default: '' },
+        gpsCoords: {
+          latitude: { type: Number },
+          longitude: { type: Number },
+          locationName: { type: String, default: '' },
+        },
+        capturedAt: { type: Date, default: Date.now },
+        uploader: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+        },
+        uploaderName: { type: String, default: '' },
+        device: { type: String, default: 'Standard Mobile Camera' },
+        room: { type: String, default: '' },
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -77,6 +121,37 @@ const inspectionSchema = new mongoose.Schema(
       ref: 'Inspection',
     },
     items: [inspectionItemSchema],
+    confirmations: [
+      {
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+        role: {
+          type: String,
+          enum: ['landlord', 'tenant', 'inspector', 'service_provider', 'admin'],
+          required: true,
+        },
+        signedName: {
+          type: String,
+          required: true,
+        },
+        confirmedAt: {
+          type: Date,
+          default: Date.now,
+        },
+        comments: {
+          type: String,
+          default: '',
+        },
+        status: {
+          type: String,
+          enum: ['Approved', 'Contested', 'Pending'],
+          default: 'Approved',
+        },
+      },
+    ],
     tenantAcknowledged: {
       type: Boolean,
       default: false,

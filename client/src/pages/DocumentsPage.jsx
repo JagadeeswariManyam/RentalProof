@@ -101,8 +101,8 @@ const DocumentsPage = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Document Vault</h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">Document Vault</h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Agreements, repair invoices, receipts, and property records
           </p>
         </div>
@@ -113,23 +113,23 @@ const DocumentsPage = () => {
       </div>
 
       {/* Filter and Search */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm flex flex-wrap items-center justify-between gap-3 backdrop-blur-xl">
         <div className="relative flex-1 min-w-[240px]">
-          <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-3 text-slate-400 dark:text-slate-500" />
           <input
             type="text"
             placeholder="Search documents by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && fetchData()}
-            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none"
+            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
           />
         </div>
 
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="text-xs rounded-xl border border-slate-200 px-3 py-2 bg-slate-50 text-slate-700 font-medium focus:outline-none"
+          className="text-xs rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium focus:outline-none"
         >
           <option value="all">All Categories</option>
           <option value="Rental Agreement">Rental Agreement</option>
@@ -142,9 +142,9 @@ const DocumentsPage = () => {
       </div>
 
       {/* Document Grid / Table */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-          <h3 className="text-base font-bold text-slate-900">Stored Files ({documents.length})</h3>
+      <div className="bg-white dark:bg-slate-900/70 rounded-3xl border border-slate-200/80 dark:border-slate-800/80 shadow-sm overflow-hidden backdrop-blur-xl">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">Stored Files ({documents.length})</h3>
         </div>
 
         {loading ? (
@@ -160,7 +160,7 @@ const DocumentsPage = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 text-slate-500 font-bold uppercase tracking-wider border-b border-slate-100">
+              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-800">
                 <tr>
                   <th className="px-6 py-4">Document Name</th>
                   <th className="px-6 py-4">Category</th>
@@ -170,23 +170,23 @@ const DocumentsPage = () => {
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {documents.map((doc) => (
-                  <tr key={doc._id} className="hover:bg-slate-50/60 transition">
-                    <td className="px-6 py-4 font-bold text-slate-900 flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-brand-600 shrink-0" />
+                  <tr key={doc._id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
                       <span>{doc.name}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
+                      <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">
                         {doc.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-slate-600">{doc.property?.title}</td>
-                    <td className="px-6 py-4 text-slate-500">
+                    <td className="px-6 py-4 text-slate-600 dark:text-slate-300">{doc.property?.title}</td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                       {new Date(doc.createdAt).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 text-slate-700 font-medium">
+                    <td className="px-6 py-4 text-slate-700 dark:text-slate-200 font-medium">
                       {doc.uploadedBy?.name || 'Staff'}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -195,7 +195,7 @@ const DocumentsPage = () => {
                           href={doc.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg text-slate-500 hover:text-brand-600 hover:bg-brand-50 transition"
+                          className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/40 transition"
                           title="View / Download File"
                         >
                           <Download className="w-4 h-4" />
@@ -203,7 +203,7 @@ const DocumentsPage = () => {
                         {(isLandlord || isAdmin) && (
                           <button
                             onClick={() => handleDeleteDocument(doc._id)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
                             title="Delete Document"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -228,12 +228,12 @@ const DocumentsPage = () => {
       >
         <form onSubmit={handleUploadDocument} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Target Property</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Property</label>
             <select
               required
               value={form.propertyId}
               onChange={(e) => setForm({ ...form, propertyId: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs text-slate-900 focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             >
               {properties.map((p) => (
                 <option key={p._id} value={p._id}>
@@ -244,23 +244,23 @@ const DocumentsPage = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Document Title</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Document Title</label>
             <input
               type="text"
               required
               placeholder="e.g. Registered Tenancy Agreement 2026.pdf"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Category</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Category</label>
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full rounded-xl border border-slate-300 p-2.5 text-xs focus:outline-none"
+              className="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 p-2.5 text-xs text-slate-900 dark:text-white focus:outline-none"
             >
               <option value="Rental Agreement">Rental Agreement</option>
               <option value="Inspection Report">Inspection Report</option>
@@ -271,7 +271,7 @@ const DocumentsPage = () => {
             </select>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <Button variant="outline" size="sm" onClick={() => setUploadModalOpen(false)}>
               Cancel
             </Button>
