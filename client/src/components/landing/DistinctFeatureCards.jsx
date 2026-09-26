@@ -16,7 +16,10 @@ import {
   Scan,
   Check,
   Receipt,
-  AlertCircle
+  AlertCircle,
+  BookOpen,
+  ChevronRight,
+  Eye
 } from 'lucide-react';
 
 export const DistinctFeatureCards = () => {
@@ -31,7 +34,49 @@ export const DistinctFeatureCards = () => {
   };
 
   // ----------------------------------------------------
-  // Card 2: Before & After mini auto-comparison animation
+  // CARD 1: AUTOMATIC EVIDENCE SLIDESHOW (Cycles 4 photos)
+  // ----------------------------------------------------
+  const [slideIndex, setSlideIndex] = useState(0);
+  const evidenceSlides = [
+    {
+      img: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80',
+      room: 'Living Room',
+      item: 'North Wall & Paint',
+      hash: 'SHA256: 4c9f1a2b',
+      tag: 'Move-In Baseline'
+    },
+    {
+      img: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=400&q=80',
+      room: 'Kitchen Fixture',
+      item: 'Under-Sink Valve',
+      hash: 'SHA256: 8a17e03c',
+      tag: 'Plumbing Proof'
+    },
+    {
+      img: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=400&q=80',
+      room: 'Master Bedroom',
+      item: 'Hardwood Floor',
+      hash: 'SHA256: 1e99d7fa',
+      tag: 'Surface Condition'
+    },
+    {
+      img: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=400&q=80',
+      room: 'Bathroom',
+      item: 'Chrome Mixer & Seal',
+      hash: 'SHA256: 7f3b890a',
+      tag: 'Fixture Benchmark'
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSlideIndex((prev) => (prev + 1) % evidenceSlides.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [evidenceSlides.length]);
+
+  // ----------------------------------------------------
+  // CARD 2: Mini Before & After auto-comparison animation
   // ----------------------------------------------------
   const [miniSliderPos, setMiniSliderPos] = useState(50);
   useEffect(() => {
@@ -39,8 +84,8 @@ export const DistinctFeatureCards = () => {
     let startTime = performance.now();
     const animateMini = (time) => {
       const elapsed = (time - startTime) / 1000;
-      // Oscillate smoothly between 20% and 80% over 4 seconds
-      const pos = 50 + 30 * Math.sin(elapsed * 1.5);
+      // Smooth sinusoidal oscillation between 15% and 85%
+      const pos = 50 + 35 * Math.sin(elapsed * 1.6);
       setMiniSliderPos(pos);
       animId = requestAnimationFrame(animateMini);
     };
@@ -49,7 +94,7 @@ export const DistinctFeatureCards = () => {
   }, []);
 
   // ----------------------------------------------------
-  // Card 5: AI scan line animation
+  // CARD 5: AI scan line animation
   // ----------------------------------------------------
   const [scanLinePos, setScanLinePos] = useState(30);
   useEffect(() => {
@@ -57,7 +102,7 @@ export const DistinctFeatureCards = () => {
     let startTime = performance.now();
     const animateScan = (time) => {
       const elapsed = (time - startTime) / 1000;
-      const pos = 50 + 40 * Math.sin(elapsed * 2.0);
+      const pos = 50 + 40 * Math.sin(elapsed * 2.2);
       setScanLinePos(pos);
       animId = requestAnimationFrame(animateScan);
     };
@@ -65,11 +110,57 @@ export const DistinctFeatureCards = () => {
     return () => cancelAnimationFrame(animId);
   }, []);
 
+  // ----------------------------------------------------
+  // CARD 6: 3D DIGITAL BOOK-OPENING ANIMATION (Continuous Loop)
+  // Loop stages: CLOSED (0-20%) -> OPENING (20-40%) -> FULLY OPEN (40-70%) -> CLOSING (70-90%) -> CLOSED (90-100%)
+  // ----------------------------------------------------
+  const [bookState, setBookState] = useState('opening'); // 'closed', 'opening', 'open', 'closing'
+  const [bookAngle, setBookAngle] = useState(0);
+
+  useEffect(() => {
+    let animId;
+    let startTime = performance.now();
+    const cycleDuration = 5500; // 5.5s total book loop
+
+    const animateBook = (currentTime) => {
+      const elapsed = (currentTime - startTime) % cycleDuration;
+      const progress = elapsed / cycleDuration;
+
+      if (progress < 0.15) {
+        // Hold Closed
+        setBookState('closed');
+        setBookAngle(0);
+      } else if (progress < 0.40) {
+        // Opening smooth ease
+        const openProg = (progress - 0.15) / 0.25;
+        // EaseInOutCubic
+        const ease = openProg < 0.5 ? 4 * openProg * openProg * openProg : 1 - Math.pow(-2 * openProg + 2, 3) / 2;
+        setBookState('opening');
+        setBookAngle(ease * 165);
+      } else if (progress < 0.75) {
+        // Hold Fully Open
+        setBookState('open');
+        setBookAngle(165);
+      } else {
+        // Closing smooth ease
+        const closeProg = (progress - 0.75) / 0.25;
+        const ease = closeProg < 0.5 ? 4 * closeProg * closeProg * closeProg : 1 - Math.pow(-2 * closeProg + 2, 3) / 2;
+        setBookState('closing');
+        setBookAngle(165 - ease * 165);
+      }
+
+      animId = requestAnimationFrame(animateBook);
+    };
+
+    animId = requestAnimationFrame(animateBook);
+    return () => cancelAnimationFrame(animId);
+  }, []);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
       
       {/* ========================================================
-          CARD 1: PROPERTY EVIDENCE (Layered Physical Stack Style)
+          CARD 1: PROPERTY EVIDENCE — LAYERED STACK + AUTONOMOUS SLIDESHOW
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-cyan-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-cyan-500/15 via-teal-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -80,9 +171,12 @@ export const DistinctFeatureCards = () => {
             <div className="p-3 rounded-2xl bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-500/30 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform shadow-sm">
               <Camera className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/90 px-3 py-1 rounded-full border border-cyan-200 dark:border-cyan-800">
-              Cryptographic Proof
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/90 px-3 py-1 rounded-full border border-cyan-200 dark:border-cyan-800">
+                Auto Slideshow ({slideIndex + 1}/4)
+              </span>
+            </div>
           </div>
 
           <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
@@ -92,27 +186,59 @@ export const DistinctFeatureCards = () => {
             Room-by-room photographic ledger tagged with SHA-256 integrity hashes, GPS coordinates, and NTP timestamps.
           </p>
 
-          {/* VISUAL ARCHITECTURE: Layered 3D Document / Photo Stack */}
-          <div className="relative mt-5 h-36 rounded-2xl bg-slate-100 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3 overflow-hidden flex items-center justify-center">
+          {/* VISUAL ARCHITECTURE: Layered 3D Stack + Smooth Rotating Photo Slideshow */}
+          <div className="relative mt-5 h-40 rounded-2xl bg-slate-100 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3 overflow-hidden flex items-center justify-center select-none">
             {/* Background tilted card layer */}
-            <div className="absolute w-[85%] h-24 rounded-xl bg-slate-200 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 -rotate-6 translate-y-1 shadow-sm opacity-60" />
+            <div className="absolute w-[85%] h-28 rounded-xl bg-slate-200 dark:bg-slate-800/80 border border-slate-300 dark:border-slate-700 -rotate-6 translate-y-2 shadow-sm opacity-60 pointer-events-none" />
             
             {/* Middle tilted card layer */}
-            <div className="absolute w-[88%] h-24 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rotate-3 shadow-md opacity-80" />
+            <div className="absolute w-[89%] h-28 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rotate-3 shadow-md opacity-80 pointer-events-none" />
 
-            {/* Front Active Evidence Badge Card */}
-            <div className="relative z-10 w-[92%] h-24 rounded-xl bg-white dark:bg-slate-900 border border-cyan-500/40 p-3 shadow-lg flex items-center gap-3">
-              <div className="w-16 h-18 rounded-lg overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-950">
-                <img
-                  src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=200&q=80"
-                  alt="Evidence Item"
-                  className="w-full h-full object-cover"
-                />
+            {/* Active Slideshow Foreground Card */}
+            <div className="relative z-10 w-[94%] h-28 rounded-xl bg-white dark:bg-slate-900 border border-cyan-500/40 p-2.5 shadow-xl flex items-center gap-3 transition-all duration-500">
+              <div className="relative w-20 h-22 rounded-lg overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-950">
+                {evidenceSlides.map((slide, i) => (
+                  <img
+                    key={i}
+                    src={slide.img}
+                    alt={slide.item}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                      slideIndex === i ? 'opacity-100 scale-105' : 'opacity-0 scale-100 pointer-events-none'
+                    }`}
+                  />
+                ))}
+                <div className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-black/70 text-[8px] font-mono text-cyan-300">
+                  {slideIndex + 1}/4
+                </div>
               </div>
-              <div className="text-left space-y-1 overflow-hidden">
-                <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 block uppercase">Living Room • Item #1</span>
-                <span className="text-xs font-black text-slate-900 dark:text-white block truncate">Walls & Emulsion Paint</span>
-                <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 block truncate">SHA256: 4c9f1a2b...</span>
+
+              <div className="text-left space-y-1 overflow-hidden flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 block uppercase">
+                    {evidenceSlides[slideIndex].room}
+                  </span>
+                  <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-1.5 py-0.2 rounded border border-emerald-200 dark:border-emerald-800">
+                    {evidenceSlides[slideIndex].tag}
+                  </span>
+                </div>
+                <span className="text-xs font-black text-slate-900 dark:text-white block truncate">
+                  {evidenceSlides[slideIndex].item}
+                </span>
+                <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 block truncate">
+                  {evidenceSlides[slideIndex].hash}
+                </span>
+
+                {/* Slideshow Progress Bar Ticks */}
+                <div className="flex items-center gap-1 pt-1">
+                  {evidenceSlides.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`h-1 rounded-full transition-all duration-300 ${
+                        slideIndex === i ? 'w-5 bg-cyan-500' : 'w-1.5 bg-slate-200 dark:bg-slate-700'
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -133,7 +259,7 @@ export const DistinctFeatureCards = () => {
       </div>
 
       {/* ========================================================
-          CARD 2: BEFORE & AFTER (Interactive Mini Split Slider)
+          CARD 2: BEFORE & AFTER — AUTONOMOUS SPLIT COMPARISON SLIDER
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-indigo-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-indigo-500/15 via-purple-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -157,40 +283,44 @@ export const DistinctFeatureCards = () => {
           </p>
 
           {/* VISUAL ARCHITECTURE: Dynamic Mini Split Slider with Continuous Auto-Oscillation */}
-          <div className="relative mt-5 h-36 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950 select-none">
+          <div className="relative mt-5 h-40 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950 select-none">
             {/* Background: Move-Out (Right) */}
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-950 to-slate-900 flex items-center justify-end p-3">
               <img
                 src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=400&q=80"
                 alt="Move-Out"
-                className="absolute inset-0 w-full h-full object-cover opacity-60"
+                className="absolute inset-0 w-full h-full object-cover opacity-70"
               />
-              <span className="relative z-10 px-2 py-0.5 rounded bg-indigo-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider">
+              <span className="relative z-10 px-2 py-0.5 rounded bg-indigo-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider shadow-sm">
                 Move-Out
               </span>
             </div>
 
             {/* Foreground: Move-In (Left - Clipped) */}
             <div
-              className="absolute inset-y-0 left-0 bg-gradient-to-tr from-cyan-950 to-slate-900 border-r-2 border-white overflow-hidden"
+              className="absolute inset-y-0 left-0 bg-gradient-to-tr from-cyan-950 to-slate-900 border-r-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.8)] overflow-hidden"
               style={{ width: `${miniSliderPos}%` }}
             >
               <img
                 src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=400&q=80"
                 alt="Move-In"
-                className="absolute inset-0 w-full h-full object-cover opacity-80"
+                className="absolute inset-0 w-full h-full object-cover opacity-90 max-w-none"
               />
-              <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-cyan-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider">
+              <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-cyan-600/90 text-white font-extrabold text-[9px] uppercase tracking-wider shadow-sm">
                 Move-In
               </span>
             </div>
 
             {/* Split Divider Dot */}
             <div
-              className="absolute top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white text-slate-900 border-2 border-indigo-600 shadow-md flex items-center justify-center -translate-x-1/2"
+              className="absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white text-slate-900 border-2 border-indigo-600 shadow-xl flex items-center justify-center -translate-x-1/2 z-20 pointer-events-none"
               style={{ left: `${miniSliderPos}%` }}
             >
-              <SplitSquareVertical className="w-3 h-3 text-indigo-600" />
+              <SplitSquareVertical className="w-3.5 h-3.5 text-indigo-600" />
+            </div>
+
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700 text-[8px] font-mono text-slate-300 z-10">
+              Autonomous Delta Motion
             </div>
           </div>
         </div>
@@ -210,7 +340,7 @@ export const DistinctFeatureCards = () => {
       </div>
 
       {/* ========================================================
-          CARD 3: MAINTENANCE TRACKING (Repair Ticket / Stepper Style)
+          CARD 3: MAINTENANCE TRACKING — VERTICAL REPAIR PROGRESS
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-amber-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-amber-500/15 via-orange-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -234,10 +364,10 @@ export const DistinctFeatureCards = () => {
           </p>
 
           {/* VISUAL ARCHITECTURE: Ticket Stepper Timeline Interface */}
-          <div className="mt-5 h-36 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3.5 flex flex-col justify-between">
+          <div className="mt-5 h-40 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3.5 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-xs font-bold text-slate-900 dark:text-white">Ticket #M-101 (Plumbing)</span>
               </div>
               <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800">
@@ -247,15 +377,15 @@ export const DistinctFeatureCards = () => {
 
             {/* Stepper Progress Bar */}
             <div className="grid grid-cols-4 gap-1 pt-1 text-[9px] font-bold text-center">
-              <div className="p-1 rounded bg-emerald-500 text-white">Reported</div>
-              <div className="p-1 rounded bg-emerald-500 text-white">Assigned</div>
-              <div className="p-1 rounded bg-emerald-500 text-white">Serviced</div>
-              <div className="p-1 rounded bg-emerald-600 text-white ring-1 ring-emerald-400">Verified</div>
+              <div className="p-1.5 rounded-lg bg-emerald-500 text-white shadow-sm">Reported</div>
+              <div className="p-1.5 rounded-lg bg-emerald-500 text-white shadow-sm">Assigned</div>
+              <div className="p-1.5 rounded-lg bg-emerald-500 text-white shadow-sm">Serviced</div>
+              <div className="p-1.5 rounded-lg bg-emerald-600 text-white ring-1 ring-emerald-400 shadow-sm animate-pulse">Verified</div>
             </div>
 
-            <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-1.5">
-              <span>Technician: Apex Plumbing</span>
-              <span className="font-bold text-slate-700 dark:text-slate-300">₹1,200 (Invoice Attached)</span>
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-2">
+              <span className="truncate">Contractor: Apex Plumbing</span>
+              <span className="font-bold text-slate-700 dark:text-slate-300 shrink-0">₹1,200 (Reconciled)</span>
             </div>
           </div>
         </div>
@@ -275,7 +405,7 @@ export const DistinctFeatureCards = () => {
       </div>
 
       {/* ========================================================
-          CARD 4: DEPOSIT RECORDS (Financial Ledger / Escrow Style)
+          CARD 4: DEPOSIT RECORDS — MATHEMATICAL FINANCIAL LEDGER
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-emerald-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-emerald-500/15 via-teal-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -299,7 +429,7 @@ export const DistinctFeatureCards = () => {
           </p>
 
           {/* VISUAL ARCHITECTURE: Bank Ledger / Escrow Statement */}
-          <div className="mt-5 h-36 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3.5 flex flex-col justify-between font-mono text-xs">
+          <div className="mt-5 h-40 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3.5 flex flex-col justify-between font-mono text-xs">
             <div className="flex justify-between items-center text-slate-600 dark:text-slate-400 text-[11px]">
               <span>INITIAL ESCROW DEPOSIT:</span>
               <span className="font-bold text-slate-900 dark:text-white">₹64,000.00</span>
@@ -308,7 +438,7 @@ export const DistinctFeatureCards = () => {
             <div className="space-y-1 text-[10px]">
               <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
                 <span>+ 6 Months Verified Rent:</span>
-                <span>100% Paid</span>
+                <span>100% On-Time</span>
               </div>
               <div className="flex justify-between text-amber-600 dark:text-amber-400">
                 <span>- Approved Maintenance Deductions:</span>
@@ -318,7 +448,7 @@ export const DistinctFeatureCards = () => {
 
             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-emerald-700 dark:text-emerald-300 font-bold text-xs">
               <span>RECORDED REFUND BALANCE:</span>
-              <span className="text-sm">₹62,800.00</span>
+              <span className="text-sm font-black">₹62,800.00</span>
             </div>
           </div>
         </div>
@@ -338,7 +468,7 @@ export const DistinctFeatureCards = () => {
       </div>
 
       {/* ========================================================
-          CARD 5: AI-ASSISTED OBSERVATION (Scanning Radar / HUD Style)
+          CARD 5: AI-ASSISTED OBSERVATION — RADAR HUD SCANNER
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-purple-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-purple-500/15 via-pink-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -362,10 +492,10 @@ export const DistinctFeatureCards = () => {
           </p>
 
           {/* VISUAL ARCHITECTURE: Futuristic Radar / Scanning Matrix */}
-          <div className="relative mt-5 h-36 rounded-2xl bg-slate-950 border border-purple-500/30 p-3 overflow-hidden flex flex-col justify-between">
+          <div className="relative mt-5 h-40 rounded-2xl bg-slate-950 border border-purple-500/30 p-3 overflow-hidden flex flex-col justify-between select-none">
             {/* Animated Laser Scan line */}
             <div
-              className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-purple-400 to-transparent shadow-[0_0_10px_rgba(192,132,252,0.9)] pointer-events-none"
+              className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-purple-400 to-transparent shadow-[0_0_12px_rgba(192,132,252,0.95)] pointer-events-none"
               style={{ top: `${scanLinePos}%` }}
             />
 
@@ -379,18 +509,18 @@ export const DistinctFeatureCards = () => {
             {/* Target Reticles */}
             <div className="grid grid-cols-2 gap-2 my-1">
               <div className="p-1.5 rounded-lg bg-purple-950/80 border border-purple-800/80 text-[10px] text-purple-200 flex items-center justify-between">
-                <span>Wall Discoloration</span>
+                <span>Possible Change</span>
                 <span className="text-amber-400 font-bold">1.4% Var</span>
               </div>
               <div className="p-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800/80 text-[10px] text-emerald-200 flex items-center justify-between">
-                <span>Hardwood Floor</span>
-                <span className="text-emerald-400 font-bold">Matched</span>
+                <span>Requires Review</span>
+                <span className="text-emerald-400 font-bold">Advisory</span>
               </div>
             </div>
 
             <div className="text-[9px] text-slate-400 flex items-center gap-1 italic">
               <AlertCircle className="w-3 h-3 text-purple-400 shrink-0" />
-              <span>Advisory signal • Requires manual review</span>
+              <span>Manual verification recommended before sign-off</span>
             </div>
           </div>
         </div>
@@ -410,7 +540,7 @@ export const DistinctFeatureCards = () => {
       </div>
 
       {/* ========================================================
-          CARD 6: RENTAL REPORTS (Stacked Document / Certificate Style)
+          CARD 6: RENTAL REPORTS — CONTINUOUS 3D BOOK-OPENING ANIMATION
           ======================================================== */}
       <div className="group relative rounded-3xl bg-white dark:bg-slate-900/90 p-6 sm:p-7 border border-slate-200/80 dark:border-slate-800 hover:border-sky-500/50 shadow-lg dark:shadow-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden">
         <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-br from-sky-500/15 via-blue-500/5 to-transparent rounded-full blur-2xl pointer-events-none" />
@@ -419,11 +549,14 @@ export const DistinctFeatureCards = () => {
           {/* Card Category Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 rounded-2xl bg-sky-50 dark:bg-sky-950/80 border border-sky-200 dark:border-sky-500/30 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform shadow-sm">
-              <FileCheck2 className="w-5 h-5" />
+              <BookOpen className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/90 px-3 py-1 rounded-full border border-sky-200 dark:border-sky-800">
-              Court-Ready PDF
-            </span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/90 px-3 py-1 rounded-full border border-sky-200 dark:border-sky-800">
+                Book Open Animation
+              </span>
+            </div>
           </div>
 
           <h3 className="text-xl font-black text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
@@ -433,31 +566,107 @@ export const DistinctFeatureCards = () => {
             Export structured, printable PDF tenancy audit certificates with digital signatures, photo ledgers, and history.
           </p>
 
-          {/* VISUAL ARCHITECTURE: Stacked Official Report Certificate */}
-          <div className="relative mt-5 h-36 rounded-2xl bg-slate-50 dark:bg-slate-950/90 border border-slate-200 dark:border-slate-800 p-3.5 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-sky-500" />
-                <span className="text-xs font-black text-slate-900 dark:text-white">RentalProof Certificate</span>
+          {/* VISUAL ARCHITECTURE: Continuous 3D Digital Book / Document Opening Presentation */}
+          <div className="relative mt-5 h-40 rounded-2xl bg-gradient-to-b from-slate-100 to-slate-200/70 dark:from-slate-950 dark:to-slate-900 border border-slate-200 dark:border-slate-800 p-3 overflow-hidden flex items-center justify-center select-none perspective-[800px]">
+            
+            {/* 3D BOOK CONTAINER */}
+            <div className="relative w-56 h-32 flex items-center justify-center">
+              
+              {/* BACK COVER / BASE OF BOOK */}
+              <div className="absolute inset-0 rounded-xl bg-slate-900 dark:bg-slate-950 border border-sky-500/40 shadow-xl overflow-hidden flex flex-col justify-between p-2.5 text-white">
+                {/* Right Page (Fixed Interior Right Page) */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-1">
+                    <span className="text-[8px] font-bold text-sky-400 uppercase tracking-wider">Audit Certificate</span>
+                    <span className="text-[7px] font-mono text-slate-400">RP-2026-CERT</span>
+                  </div>
+                  
+                  <div className="space-y-1 text-[8px] text-slate-300">
+                    <div className="flex items-center gap-1 text-emerald-400 font-bold">
+                      <Check className="w-2.5 h-2.5 shrink-0" /> Dual Signatures Verified
+                    </div>
+                    <div className="flex items-center gap-1 text-cyan-400 font-bold">
+                      <Check className="w-2.5 h-2.5 shrink-0" /> 16 Photo Evidence Entries
+                    </div>
+                    <div className="flex items-center gap-1 text-amber-400 font-bold">
+                      <Check className="w-2.5 h-2.5 shrink-0" /> Deposit Deductions Itemized
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1 border-t border-slate-800 text-[8px] text-slate-400">
+                  <span>Court / Arbitrator Ready</span>
+                  <span className="font-bold text-sky-400">Signed PDF</span>
+                </div>
               </div>
-              <span className="text-[9px] font-mono text-slate-400">RP-2026-CERT</span>
+
+              {/* FLIPPING FRONT COVER (Rotates around left spine: Y-axis rotation from 0deg to -165deg) */}
+              <div
+                className="absolute inset-y-0 left-0 w-full rounded-xl bg-gradient-to-br from-sky-600 via-brand-600 to-indigo-700 text-white shadow-2xl border border-sky-300/40 p-3 flex flex-col justify-between transition-transform duration-100 ease-linear origin-left"
+                style={{
+                  transform: `rotateY(-${bookAngle}deg)`,
+                  transformStyle: 'preserve-3d',
+                  backfaceVisibility: 'hidden',
+                  zIndex: bookAngle > 90 ? 5 : 25,
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <ShieldCheck className="w-5 h-5 text-white" />
+                  <span className="text-[8px] font-mono uppercase tracking-widest bg-black/30 px-1.5 py-0.5 rounded">
+                    Official Ledger
+                  </span>
+                </div>
+
+                <div className="space-y-0.5 my-auto">
+                  <span className="text-[9px] uppercase tracking-wider text-sky-200 block font-bold">Tenancy Certificate</span>
+                  <h4 className="text-xs font-black text-white leading-tight">RentalProof Audit Record</h4>
+                  <p className="text-[8px] text-sky-100 opacity-90">Tamper-evident move-in to checkout export</p>
+                </div>
+
+                <div className="flex items-center justify-between text-[7px] text-sky-200 border-t border-white/20 pt-1">
+                  <span>Unit #402 Multi-Spectrum</span>
+                  <span>SHA-256 Validated</span>
+                </div>
+              </div>
+
+              {/* REVERSE SIDE OF FLIPPING COVER (Revealed when opened > 90deg) */}
+              <div
+                className="absolute inset-y-0 left-0 w-full rounded-xl bg-slate-900 text-white shadow-xl border border-slate-800 p-2.5 flex flex-col justify-between origin-left"
+                style={{
+                  transform: `rotateY(-${bookAngle - 180}deg)`,
+                  transformStyle: 'preserve-3d',
+                  backfaceVisibility: 'hidden',
+                  zIndex: bookAngle > 90 ? 25 : 5,
+                  opacity: bookAngle > 90 ? 1 : 0,
+                }}
+              >
+                <div className="text-[8px] font-bold text-sky-400 border-b border-slate-800 pb-1">
+                  Tenancy Summary Details
+                </div>
+                <div className="space-y-1 text-[8px] text-slate-300">
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Lease:</span>
+                    <span>Apr 2026 - Mar 2027</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Baseline Hash:</span>
+                    <span className="font-mono text-cyan-400">0x4c9f..1a2b</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-500">Deposit Balance:</span>
+                    <span className="text-emerald-400 font-bold">₹62,800.00</span>
+                  </div>
+                </div>
+                <div className="text-[7px] text-slate-500 italic">
+                  Digital RentalProof Seal Affixed
+                </div>
+              </div>
+
             </div>
 
-            <div className="space-y-1 text-[10px] text-slate-600 dark:text-slate-300">
-              <div className="flex items-center gap-1.5">
-                <Check className="w-3 h-3 text-emerald-500" /> Move-In & Move-Out Photo Appendices
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Check className="w-3 h-3 text-emerald-500" /> Dual Landlord & Tenant Digital Signatures
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Check className="w-3 h-3 text-emerald-500" /> Itemized Deposit Deductions Reconciled
-              </div>
-            </div>
-
-            <div className="pt-1.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
-              <span>Ready for Court / Arbitrator</span>
-              <span className="font-bold text-sky-600 dark:text-sky-400">Instant PDF</span>
+            {/* Continuous Book Indicator Overlay */}
+            <div className="absolute bottom-1.5 right-2 px-2 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-sm border border-slate-700 text-[8px] font-mono text-sky-300 z-30">
+              {bookState === 'closed' ? 'Closed Document' : bookState === 'open' ? 'Report Open' : 'Animating Book Page...'}
             </div>
           </div>
         </div>
@@ -481,3 +690,4 @@ export const DistinctFeatureCards = () => {
 };
 
 export default DistinctFeatureCards;
+
