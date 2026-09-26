@@ -105,6 +105,13 @@ const RegisterPage = () => {
       icon: Wrench,
       accent: 'border-amber-400 text-amber-400 bg-amber-950/40',
     },
+    {
+      value: 'admin',
+      label: 'Admin',
+      subtitle: 'System Overseer',
+      icon: Shield,
+      accent: 'border-rose-400 text-rose-400 bg-rose-950/40',
+    },
   ];
 
   return (
@@ -144,12 +151,12 @@ const RegisterPage = () => {
 
           <div className="bg-white/90 dark:bg-slate-900/90 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-xl dark:shadow-2xl">
             <form className="space-y-4" onSubmit={handleSubmit}>
-              {/* Role Selection Chips (Public 3 Roles) */}
+              {/* Role Selection Chips (4 Roles) */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
                   Select Your Account Role
                 </label>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                   {roles.map((r) => {
                     const Icon = r.icon;
                     const isSelected = formData.role === r.value;
