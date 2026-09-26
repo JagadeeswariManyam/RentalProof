@@ -42,18 +42,15 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         
-        {/* Brand Logo (Clean Icon Mark + Subtle PropTech Label) */}
+        {/* Brand Logo (Clean Icon Mark Only, 40-44px) */}
         <Link
           to="/"
           aria-label="RentalProof Home"
-          className="flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-brand-400 rounded-xl"
+          className="flex items-center group focus:outline-none focus:ring-2 focus:ring-brand-400 rounded-xl"
         >
-          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
+          <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-gradient-to-tr from-brand-600 via-brand-500 to-cyan-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-transform">
             <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-            RentalProof
-          </span>
         </Link>
 
         {/* Desktop Navigation Links */}
