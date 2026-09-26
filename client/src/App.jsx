@@ -30,6 +30,7 @@ import ReportsPage from './pages/ReportsPage';
 import AuditLogsPage from './pages/AuditLogsPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
+import AdminUsersPage from './pages/AdminUsersPage';
 
 // Protected Route Guard
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -37,7 +38,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (loading) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-slate-50">
+      <div className="h-screen w-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand-600"></div>
       </div>
     );
@@ -154,7 +155,7 @@ function App() {
             path="/admin/users"
             element={
               <ProtectedRoute allowedRoles={['admin']}>
-                <AdminDashboardPage />
+                <AdminUsersPage />
               </ProtectedRoute>
             }
           />

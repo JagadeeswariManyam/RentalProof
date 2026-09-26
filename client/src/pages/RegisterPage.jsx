@@ -158,13 +158,15 @@ const RegisterPage = () => {
                         key={r.value}
                         type="button"
                         onClick={() => setFormData({ ...formData, role: r.value })}
-                        className={`p-3 text-xs font-bold rounded-2xl border transition-all flex flex-col items-center text-center gap-1 cursor-pointer ${
+                        className={`p-3 text-xs font-bold rounded-2xl border transition-all duration-200 flex flex-col items-center text-center gap-1 cursor-pointer transform ${
                           isSelected
-                            ? 'bg-cyan-50 dark:bg-slate-950 border-cyan-500 dark:border-cyan-400 text-cyan-700 dark:text-white shadow-md shadow-cyan-500/10 dark:shadow-cyan-900/30 ring-1 ring-cyan-500 dark:ring-cyan-400/40'
-                            : 'bg-slate-50 dark:bg-slate-950/70 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                            ? 'bg-cyan-50 dark:bg-cyan-950/60 border-cyan-500 dark:border-cyan-400 text-cyan-800 dark:text-cyan-200 shadow-md shadow-cyan-500/15 ring-2 ring-cyan-500/30 dark:ring-cyan-400/40 scale-[1.03]'
+                            : 'bg-slate-50 dark:bg-slate-950/70 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
                         }`}
                       >
-                        <Icon className="w-5 h-5 mb-0.5" />
+                        <div className={`p-1.5 rounded-xl transition-transform ${isSelected ? 'scale-110' : ''}`}>
+                          <Icon className={`w-5 h-5 ${isSelected ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
+                        </div>
                         <span className="font-bold text-xs">{r.label}</span>
                         <span className="text-[10px] text-slate-500 dark:text-slate-400 font-normal">{r.subtitle}</span>
                       </button>
